@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - 5400:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    restart: always 
+
+  joplin:
+    image: joplin/server:latest
+    depends_on:
+      - postgres
+    ports:
+      - 22300:22300
+    environment:
+      - APP_BASE_URL=https://j.example.com
+      - APP_PORT=22300
+      - DB_CLIENT=pg
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_PORT=5432
+    restart: always 
+
